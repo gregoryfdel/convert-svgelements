@@ -1,7 +1,7 @@
 import svgwrite
 import svgelements as svgelements
 
-svg = svgelements.SVG.parse('run_97279_54.svg')
+svg = svgelements.SVG.parse('<Filename Here>')
 elements = []
 for element in svg.elements():
 	try:
