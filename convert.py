@@ -36,7 +36,7 @@ for element in svg.elements():
 #    extrakw  (dict):   A dictionary representing (keyword, value) pairs for the
 #			svgwrite initalization functions
 
-def buildExtra(eleAttrs, noList):
+def buildExtra(eleAttrs, noList, custAttrs={}):
 	noList.extend(['tag','attributes',''])
 	extrakw = {}
 	for kw, kv in eleAttrs.items():
@@ -49,7 +49,11 @@ def buildExtra(eleAttrs, noList):
 		#Special Cases
 		if kw == "stroke_dasharray":
 			kv = [int(x.strip()) for x in kv.split(",")]
-		extrakw[kw] = kv
+		
+		if kw in custAttrs.keys():
+			extrakw[kw] = custAttrs[kw]
+		else:
+			extrakw[kw] = kv
 	return extrakw
 
 # The new svg image which our elements will be written to
@@ -88,6 +92,8 @@ for element in elements:
 
 
 	if curEle is not None:
+		if element.id is not None:
+			curEle.update({"id":element.id})
 		D.add(curEle)
 
 #Save the svg
