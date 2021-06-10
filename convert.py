@@ -9,6 +9,7 @@ for element in svg.elements():
 			continue
 	except (KeyError, AttributeError):
 		pass
+	# An example of some processing, only keep large shapes
 	if isinstance(element, svgelements.Shape):
 		ebbox = element.bbox()
 		h = ebbox[3] - ebbox[1]
@@ -20,6 +21,20 @@ for element in svg.elements():
 		pass
 
 
+# To get the extra parameters for the svgwrite objects
+# we build a keyword argument dictionary.
+
+#Parameters:
+#    eleAttrs (dict):   The element's "values" dictionary, contains all information
+#			about the tag in a parsable format
+#
+#    noList   (list):   A list of information in the "values" dictionary which is
+#			either already used, or doesn't contribute to the look
+#			of the element
+
+#Returns:
+#    extrakw  (dict):   A dictionary representing (keyword, value) pairs for the
+#			svgwrite initalization functions
 
 def buildExtra(eleAttrs, noList):
 	noList.extend(['tag','attributes',''])
@@ -37,9 +52,13 @@ def buildExtra(eleAttrs, noList):
 		extrakw[kw] = kv
 	return extrakw
 
+# The new svg image which our elements will be written to
 D = svgwrite.drawing.Drawing(filename="cleaned_fig.svg", size=(svg.width, svg.height))
 typeExamp = {}
 for element in elements:
+	# using element.values allows us to iterate through all
+	# the extraneous parameters associated with the element
+	# while also accessing it's type easily
 	eleType = element.values['tag']
 	eleAttrs = element.values
 	curEle = None
@@ -63,14 +82,18 @@ for element in elements:
 		polPo = element.points
 		curEle = svgwrite.shapes.Polygon(points=polPo, **extrakw)
 	else:
+		#If it is an unsupported object, print out some information at
+		#the end which will allow us to write a parser for it
 		typeExamp[curEle] = eleAttrs
 
 
 	if curEle is not None:
 		D.add(curEle)
 
+#Save the svg
 D.save(pretty=True)
 
+#Print out the unsupported objects
 if len(typeExamp) > 0:
 	print("Unable to parse every object found")
 	for kk, vv in typeExamp.items():
