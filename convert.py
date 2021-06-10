@@ -1,5 +1,5 @@
 import svgwrite
-import svgelements as svgelements
+import svgelements
 
 svg = svgelements.SVG.parse('<Filename Here>')
 elements = []
