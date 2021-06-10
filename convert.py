@@ -31,6 +31,9 @@ for element in svg.elements():
 #    noList   (list):   A list of information in the "values" dictionary which is
 #			either already used, or doesn't contribute to the look
 #			of the element
+#
+#    custAttrs (dict):  A dictionary representing attributes that one would want to 
+#			force onto processed elements
 
 #Returns:
 #    extrakw  (dict):   A dictionary representing (keyword, value) pairs for the
