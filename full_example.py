@@ -8,21 +8,6 @@ def addToDict(ddi,topLK,subLK):
 	else:
 		ddi[topLK] = [subLK]
 
-# To get the extra parameters for the svgwrite objects
-# we build a keyword argument dictionary.
-
-#Parameters:
-#    eleAttrs (dict):   The element's "values" dictionary, contains all information
-#			about the tag in a parsable format
-#
-#    noList   (list):   A list of information in the "values" dictionary which is
-#			either already used, or doesn't contribute to the look
-#			of the element
-
-#Returns:
-#    extrakw  (dict):   A dictionary representing (keyword, value) pairs for the
-#			svgwrite initalization functions
-
 def buildExtra(eleAttrs, noList, custAttrs={}):
 	noList.extend(['tag','attributes',''])
 	extrakw = {}
@@ -47,9 +32,6 @@ def addElements(svgwriteObj, elementList, **extraprops):
 	typeExamp = {}
 	drawnElements = []
 	for element in elementList:
-		# using element.values allows us to iterate through all
-		# the extraneous parameters associated with the element
-		# while also accessing it's type easily
 		eleType = element.values['tag']
 		eleAttrs = element.values
 		curEle = None
@@ -73,8 +55,6 @@ def addElements(svgwriteObj, elementList, **extraprops):
 			polPo = element.points
 			curEle = svgwrite.shapes.Polygon(points=polPo, **extrakw)
 		else:
-			#If it is an unsupported object, print out some information at
-			#the end which will allow us to write a parser for it
 			typeExamp[curEle] = eleAttrs
 
 
@@ -137,7 +117,6 @@ for element in svg.elements():
 	else:
 		pass
 
-# The new svg image which our elements will be written to
 D = svgwrite.drawing.Drawing(filename="cleaned_fig.svg", size=(svg.width, svg.height))
 typeExamp, drawnEle = addElements(D, elementDicts['rect'], stroke='#000000', stroke_width=3, stroke_opacity=1.0)
 typeExamp, drawnEle  = addElements(D, elementDicts['path'])
@@ -156,10 +135,8 @@ curS = svgwrite.container.Style('''
 
 D.defs.add(curS)
 
-#Save the svg
 D.save(pretty=True)
 
-#Print out the unsupported objects
 if len(typeExamp) > 0:
 	print("Unable to parse every object found")
 	for kk, vv in typeExamp.items():
