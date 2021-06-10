@@ -7,6 +7,10 @@ A script which showcases a technique to convert svgelements objects into svgwrit
 * Rect
 * Polygon
 
+# Different Files
+There are two python files in this repository
+* convert.py is a small working example with comments
+* full_example.py is the full script I use without comments
 
 # Requirements
 * [svgwrite](https://github.com/mozman/svgwrite)
